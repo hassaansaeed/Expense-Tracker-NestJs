@@ -13,5 +13,8 @@ export class CreateExpenseDto {
   @IsNotEmpty()
   category_id: string;
 
+  @IsOptional()
+  budget_id: string;
+
   user_id?: string;
 }

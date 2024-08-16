@@ -41,7 +41,6 @@ export class ExpenseController {
     @Req() req: CustomRequest,
   ): Promise<Expense> {
     createExpenseDto.user_id = req.user.uuid;
-
     return this.expenseService.create(createExpenseDto);
   }
 

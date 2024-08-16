@@ -10,5 +10,8 @@ export class CreateExpenseDto {
   @IsNotEmpty()
   category_id: string;
 
+  @IsNotEmpty()
+  budget_id: string;
+
   user_id?: string;
 }

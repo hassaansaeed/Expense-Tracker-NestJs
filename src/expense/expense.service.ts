@@ -9,12 +9,14 @@ import { Category } from 'src/category/category.schema';
 import { Model } from 'mongoose';
 import { Expense } from './expense.schema';
 import { retry } from 'rxjs';
+import { Budget } from 'src/budget/budget.schema';
 
 @Injectable()
 export class ExpenseService {
   constructor(
     @InjectModel(Expense.name) private expenseModel: Model<Expense>,
     @InjectModel(Category.name) private categoryModel: Model<Category>,
+    @InjectModel(Budget.name) private budgetModel: Model<Budget>,
   ) {}
 
   async expenses(user_id): Promise<Expense[]> {
@@ -26,22 +28,20 @@ export class ExpenseService {
   }
 
   async create(createExpenseDto: CreateExpenseDto) {
-    const { category_id, name, amount, user_id } = createExpenseDto;
-    const category = await this.categoryModel.findOne({ uuid: category_id });
-    if (!category) {
-      throw new NotFoundException('Category not found');
+    const [category, budget] = await Promise.all([
+      this.categoryModel.findOne({ uuid: createExpenseDto.category_id }),
+      this.budgetModel.findOne({ uuid: createExpenseDto.budget_id }),
+    ]);
+
+    if (!category || !budget) {
+      throw new NotFoundException('Category or budget not found');
     }
 
-    return this.expenseModel.create({
-      name,
-      amount,
-      category_id: category.uuid,
-      user_id: user_id,
-    });
+    return this.expenseModel.create(createExpenseDto);
   }
 
   async update(id, createExpenseDto: CreateExpenseDto): Promise<Expense> {
-    const { category_id, name, amount, user_id } = createExpenseDto;
+    const { category_id, budget_id, name, amount, user_id } = createExpenseDto;
 
     const [category, expense] = await Promise.all([
       this.categoryModel.findOne({ uuid: category_id }),
@@ -63,6 +63,7 @@ export class ExpenseService {
     expense.name = name;
     expense.amount = amount;
     expense.category_id = category_id;
+    expense.budget_id = budget_id;
     return expense.save();
   }
 

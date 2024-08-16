@@ -17,6 +17,9 @@ export class Expense extends Document {
   @Prop({ type: String, ref: 'Category' })
   category_id: string;
 
+  @Prop({ type: String })
+  budget_id: string;
+
   @Prop({ type: String, required: true })
   user_id: string;
 
