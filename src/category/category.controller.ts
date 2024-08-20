@@ -8,6 +8,7 @@ import {
   Put,
   Req,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -15,6 +16,7 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { Category } from './category.schema';
 import { CustomRequest } from 'src/request-interface';
+import { CategoryInterceptor } from 'src/interceptors/category.interceptor';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('category')
@@ -27,6 +29,7 @@ export class CategoryController {
   // }
 
   @Get('/:id?')
+  @UseInterceptors(CategoryInterceptor)
   category(
     @Param('id') id: string,
     @Req() req: CustomRequest,

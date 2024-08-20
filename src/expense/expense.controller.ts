@@ -8,12 +8,14 @@ import {
   Put,
   Req,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ExpenseService } from './expense.service';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import { Expense } from './expense.schema';
 import { CustomRequest } from 'src/request-interface';
 import { AuthGuard } from '@nestjs/passport';
+import { ExpenseInterceptor } from 'src/interceptors/expense.interceptor';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('expense')
@@ -21,12 +23,14 @@ export class ExpenseController {
   constructor(private expenseService: ExpenseService) {}
 
   @Get()
+  @UseInterceptors(ExpenseInterceptor)
   expenses(@Req() req: CustomRequest): Promise<Expense[]> {
     const user_id = req.user.uuid;
     return this.expenseService.expenses(user_id);
   }
 
   @Get('/:id')
+  @UseInterceptors(ExpenseInterceptor)
   expense(
     @Param('id') id: string,
     @Req() req: CustomRequest,

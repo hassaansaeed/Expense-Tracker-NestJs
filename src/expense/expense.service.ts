@@ -10,6 +10,7 @@ import { Model } from 'mongoose';
 import { Expense } from './expense.schema';
 import { retry } from 'rxjs';
 import { Budget } from 'src/budget/budget.schema';
+import { PopulateUtils } from 'src/utils/populate.utils';
 
 @Injectable()
 export class ExpenseService {
@@ -19,25 +20,18 @@ export class ExpenseService {
     @InjectModel(Budget.name) private budgetModel: Model<Budget>,
   ) {}
 
-  private populateCategory() {
-    return {
-      path: 'category_id',
-      model: 'Category',
-      select: 'name uuid',
-      match: { uuid: { $exists: true } },
-      localField: 'category_id',
-      foreignField: 'uuid',
-    };
-  }
-
   async expenses(user_id): Promise<Expense[]> {
-    return this.expenseModel.find({ user_id: user_id }).populate(this.populateCategory())
-    .exec();
+    return this.expenseModel
+      .find({ user_id: user_id })
+      .populate(PopulateUtils.populateCategory())
+      .exec();
   }
 
   async expense(id, user_id): Promise<Expense> {
-    return this.expenseModel.findOne({ uuid: id, user_id: user_id }).populate(this.populateCategory())
-    .exec();
+    return this.expenseModel
+      .findOne({ uuid: id, user_id: user_id })
+      .populate(PopulateUtils.populateCategory())
+      .exec();
   }
 
   async create(createExpenseDto: CreateExpenseDto) {
