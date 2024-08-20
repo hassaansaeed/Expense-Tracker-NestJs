@@ -9,4 +9,15 @@ export class PopulateUtils {
       foreignField: 'uuid',
     };
   }
+
+  static populateBudget() {
+    return {
+      path: 'budget_id',
+      model: 'Budget',
+      select: 'name uuid',
+      match: { uuid: { $exists: true } },
+      localField: 'budget_id',
+      foreignField: 'uuid',
+    };
+  }
 }

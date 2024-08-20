@@ -32,7 +32,8 @@ export class BudgetInterceptor implements NestInterceptor {
       createdAt,
       category_id,
     } = budget;
-    const categoryName = budget.category_id?.name || null; // Assuming 'name' is a field in the Category
+    const categoryName = budget.category_id?.name || null;
+    const categoryId = budget.category_id?.uuid || null;
 
     return {
       uuid,
@@ -42,6 +43,8 @@ export class BudgetInterceptor implements NestInterceptor {
       start_date,
       end_date,
       createdAt,
+      category_id: categoryId,
+
       category: categoryName,
     };
   }
