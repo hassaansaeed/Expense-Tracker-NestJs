@@ -5,6 +5,7 @@ import { Budget } from './budget.schema';
 import { CreateBudgetDto } from './dto/create-budget.dto';
 import { Category } from 'src/category/category.schema';
 import { UpdateBudgetDto } from './dto/update-budget.dto';
+import { PopulateUtils } from 'src/utils/populate.utils';
 
 @Injectable()
 export class BudgetService {
@@ -25,16 +26,22 @@ export class BudgetService {
     return this.budgetModel.create(createBudgetDto);
   }
 
-  async budgets(user_id, id?: string): Promise<Budget[]> {
+  async budgets(user_id, id?: string): Promise<Budget | Budget[]> {
     if (id) {
-      return this.budgetModel.findOne({
-        uuid: id,
-        user_id: user_id,
-      });
+      return this.budgetModel
+        .findOne({
+          uuid: id,
+          user_id: user_id,
+        })
+        .populate(PopulateUtils.populateCategory())
+        .exec();
     } else {
-      return this.budgetModel.find({
-        user_id: user_id,
-      });
+      return this.budgetModel
+        .find({
+          user_id: user_id,
+        })
+        .populate(PopulateUtils.populateCategory())
+        .exec();
     }
   }
 

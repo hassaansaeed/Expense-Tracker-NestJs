@@ -17,7 +17,9 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signUp(authSignUpDto: AuthSignUpDto) {
+  async signUp(
+    authSignUpDto: AuthSignUpDto,
+  ): Promise<{ user: User; accessToken: string }> {
     const { firstName, lastName, email, password } = authSignUpDto;
 
     const existingUser = await this.userModel.findOne({ email });
@@ -34,7 +36,15 @@ export class AuthService {
       email,
       password: hashedPasswrd,
     });
-    return newUser.save();
+    const savedUser = await newUser.save();
+    const payload = { email: savedUser.email, sub: savedUser._id }; // sub is usually the user ID
+    const accessToken = this.jwtService.sign(payload);
+
+    // Return the user and the token
+    return {
+      user: savedUser,
+      accessToken,
+    };
   }
 
   async login(authSignInDto: AuthSignUpDto) {
