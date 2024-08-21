@@ -24,6 +24,7 @@ export class ExpenseService {
     return this.expenseModel
       .find({ user_id: user_id })
       .populate(PopulateUtils.populateCategory())
+      .populate(PopulateUtils.populateBudget())
       .exec();
   }
 
@@ -31,6 +32,7 @@ export class ExpenseService {
     return this.expenseModel
       .findOne({ uuid: id, user_id: user_id })
       .populate(PopulateUtils.populateCategory())
+      .populate(PopulateUtils.populateBudget())
       .exec();
   }
 

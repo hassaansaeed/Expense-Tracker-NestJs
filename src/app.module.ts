@@ -8,6 +8,7 @@ import { ExpenseModule } from './expense/expense.module';
 import { CategoryModule } from './category/category.module';
 import { IncomeModule } from './income/income.module';
 import { BudgetModule } from './budget/budget.module';
+import { ReportingModule } from './reporting/reporting.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { BudgetModule } from './budget/budget.module';
     CategoryModule,
     IncomeModule,
     BudgetModule,
+    ReportingModule,
   ],
   controllers: [AppController],
   providers: [AppService],
