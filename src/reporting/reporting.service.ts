@@ -19,27 +19,24 @@ export class ReportingService {
     return { start, end };
   }
 
-  async getTotalExpenses(startDate?: Date, endDate?: Date): Promise<number> {
+  async getExpensesDetail(
+    user_id: string,
+    startDate?: Date,
+    endDate?: Date,
+  ): Promise<Expense[]> {
     const { start, end } =
       startDate && endDate
         ? { start: startDate, end: endDate }
         : this.getDefaultDateRange();
 
-    const result = await this.expenseModel.aggregate([
-      {
-        $match: {
-          createdAt: { $gte: start, $lte: end },
-        },
-      },
-      {
-        $group: {
-          _id: null,
-          total: { $sum: { $toDouble: '$amount' } },
-        },
-      },
-    ]);
-
-    return result.length ? result[0].total : 0;
+    return this.expenseModel
+      .find({
+        user_id: user_id,
+        createdAt: { $gte: start, $lte: end },
+      })
+      .populate(PopulateUtils.populateCategory())
+      .populate(PopulateUtils.populateBudget())
+      .exec();
   }
 
   // Get total income for a given period

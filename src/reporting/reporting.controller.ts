@@ -1,20 +1,34 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Query,
+  Req,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ReportingService } from './reporting.service';
 import { Expense } from 'src/expense/expense.schema';
 import { Income } from 'src/income/income.schema';
+import { AuthGuard } from '@nestjs/passport';
+import { CustomRequest } from 'src/request-interface';
+import { ExpenseInterceptor } from 'src/interceptors/expense.interceptor';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('report')
 export class ReportingController {
   constructor(private readonly reportingService: ReportingService) {}
 
   @Get('expenses/total')
-  async getTotalExpenses(
+  @UseInterceptors(ExpenseInterceptor)
+  async getExpensesDetail(
+    @Req() req: CustomRequest,
     @Query('startDate') startDate?: string,
     @Query('endDate') endDate?: string,
-  ): Promise<number> {
-    const start = startDate ? new Date(startDate) : null;
-    const end = endDate ? new Date(endDate) : null;
-    return this.reportingService.getTotalExpenses(start, end);
+  ): Promise<Expense[]> {
+    const user_id = req.user.uuid;
+    const start = startDate ? new Date(startDate) : undefined;
+    const end = endDate ? new Date(endDate) : undefined;
+    return this.reportingService.getExpensesDetail(user_id, start, end);
   }
 
   @Get('income/source-wise')
