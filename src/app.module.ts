@@ -13,6 +13,11 @@ import { ReportingModule } from './reporting/reporting.module';
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost/expense-tracker'),
+
+    // Atlas Database
+    // MongooseModule.forRoot(
+    //   'mongodb+srv://creativedev45:9cdgVvuLNodHUqVU@jig3.nasm49a.mongodb.net/expense-tracker?retryWrites=true&w=majority&appName=jig3',
+    // ),
     AuthModule,
     UserModule,
     ExpenseModule,

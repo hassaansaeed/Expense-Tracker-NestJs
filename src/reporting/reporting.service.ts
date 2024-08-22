@@ -41,6 +41,7 @@ export class ReportingService {
 
   // Get total income for a given period
   async getTotalIncome(
+    user_id: string,
     startDate?: Date,
     endDate?: Date,
   ): Promise<Array<{ uuid: string; name: string; amount: number }>> {
@@ -52,6 +53,7 @@ export class ReportingService {
     const result = await this.incomeModel.aggregate([
       {
         $match: {
+          user_id: user_id,
           createdAt: { $gte: start, $lte: end },
         },
       },
@@ -79,6 +81,7 @@ export class ReportingService {
 
   // Get category-wise breakdown of expenses
   async getCategoryWiseExpenses(
+    user_id: string,
     startDate?: Date,
     endDate?: Date,
   ): Promise<any[]> {
@@ -90,6 +93,7 @@ export class ReportingService {
     return this.expenseModel.aggregate([
       {
         $match: {
+          user_id: user_id,
           createdAt: { $gte: start, $lte: end },
         },
       },

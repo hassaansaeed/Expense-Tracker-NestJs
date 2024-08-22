@@ -33,22 +33,27 @@ export class ReportingController {
 
   @Get('income/source-wise')
   async getTotalIncome(
+    @Req() req: CustomRequest,
     @Query('startDate') startDate?: string,
     @Query('endDate') endDate?: string,
   ): Promise<Array<{ uuid: string; name: string; amount: number }>> {
     const start = startDate ? new Date(startDate) : undefined;
     const end = endDate ? new Date(endDate) : undefined;
-    return this.reportingService.getTotalIncome(start, end);
+    const user_id = req.user.uuid;
+
+    return this.reportingService.getTotalIncome(user_id, start, end);
   }
 
   @Get('expenses/category-wise')
   async getCategoryWiseExpenses(
+    @Req() req: CustomRequest,
     @Query('startDate') startDate?: string,
     @Query('endDate') endDate?: string,
   ): Promise<any[]> {
     const start = startDate ? new Date(startDate) : undefined;
     const end = endDate ? new Date(endDate) : undefined;
-    return this.reportingService.getCategoryWiseExpenses(start, end);
+    const user_id = req.user.uuid;
+    return this.reportingService.getCategoryWiseExpenses(user_id, start, end);
   }
 
   @Get('income/category-wise')
