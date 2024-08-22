@@ -136,6 +136,7 @@ export class ReportingService {
 
     const budgets = await this.budgetModel
       .find({
+        user_id: user_id,
         start_date: { $lte: end },
         end_date: { $gte: start },
       })
@@ -143,6 +144,8 @@ export class ReportingService {
 
     const expenses = await this.expenseModel
       .find({
+        user_id: user_id,
+
         createdAt: { $gte: start, $lte: end },
       })
       .lean();
