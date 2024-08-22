@@ -4,12 +4,14 @@ import { Model } from 'mongoose';
 import { Expense } from '../expense/expense.schema';
 import { Income } from '../income/income.schema';
 import { PopulateUtils } from 'src/utils/populate.utils';
+import { Budget } from 'src/budget/budget.schema';
 
 @Injectable()
 export class ReportingService {
   constructor(
     @InjectModel(Expense.name) private expenseModel: Model<Expense>,
     @InjectModel(Income.name) private incomeModel: Model<Income>,
+    @InjectModel(Budget.name) private budgetModel: Model<Budget>,
   ) {}
 
   private getDefaultDateRange() {
@@ -119,6 +121,43 @@ export class ReportingService {
         },
       },
     ]);
+  }
+
+  async getBudgetExpenseWise(
+    user_id: string,
+    startDate?: Date,
+    endDate?: Date,
+  ) {
+    // Default to the start and end of the current month if no dates are provided
+    const { start, end } =
+      startDate && endDate
+        ? { start: startDate, end: endDate }
+        : this.getDefaultDateRange();
+
+    const budgets = await this.budgetModel
+      .find({
+        start_date: { $lte: end },
+        end_date: { $gte: start },
+      })
+      .lean();
+
+    const expenses = await this.expenseModel
+      .find({
+        createdAt: { $gte: start, $lte: end },
+      })
+      .lean();
+
+    return budgets.map((budget) => {
+      const spentAmount = expenses
+        .filter((expense) => expense.budget_id === budget.uuid)
+        .reduce((total, expense) => total + parseFloat(expense.amount), 0);
+
+      return {
+        ...budget,
+        spentAmount,
+        remainingAmount: parseFloat(budget.amount) - spentAmount,
+      };
+    });
   }
 
   // Get category-wise breakdown of income

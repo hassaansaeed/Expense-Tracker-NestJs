@@ -56,6 +56,18 @@ export class ReportingController {
     return this.reportingService.getCategoryWiseExpenses(user_id, start, end);
   }
 
+  @Get('budget/expense-wise')
+  async getBudgetsWithExpenses(
+    @Req() req: CustomRequest,
+    @Query('startDate') startDate?: string,
+    @Query('endDate') endDate?: string,
+  ) {
+    const start = startDate ? new Date(startDate) : undefined;
+    const end = endDate ? new Date(endDate) : undefined;
+    const user_id = req.user.uuid;
+    return this.reportingService.getBudgetExpenseWise(user_id, start, end);
+  }
+
   @Get('income/category-wise')
   async getCategoryWiseIncome(
     @Query('startDate') startDate?: string,
