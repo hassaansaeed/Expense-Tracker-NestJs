@@ -22,6 +22,7 @@ export class AuthService {
   ): Promise<{ user: User; accessToken: string }> {
     const { firstName, lastName, email, password } = authSignUpDto;
 
+    // console.log('create us')
     const existingUser = await this.userModel.findOne({ email });
     if (existingUser) {
       throw new BadRequestException('Email already exists');
@@ -35,6 +36,7 @@ export class AuthService {
       lastName,
       email,
       password: hashedPasswrd,
+      role: 'admin',
     });
     const savedUser = await newUser.save();
     const payload = { email: savedUser.email, sub: savedUser._id }; // sub is usually the user ID

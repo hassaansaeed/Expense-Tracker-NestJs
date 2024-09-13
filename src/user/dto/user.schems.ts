@@ -19,11 +19,11 @@ export class User extends Document {
   @Prop({ default: uuid, unique: true })
   uuid: string;
 
-  @Prop({ type: String, enum: ['admin', 'user', 'Company'], default: 'user' })
+  @Prop({ type: String, enum: ['user', 'admin', 'Company'], default: 'user' })
   role: string;
 
-  // @Prop({ type: String, ref: 'Company' })
-  // companyId: string;
+  @Prop({ type: String, ref: 'Company' })
+  company_id: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
