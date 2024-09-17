@@ -28,14 +28,14 @@ export class CategoryController {
   //   return this.categoryService.categories();
   // }
 
-  @Get('/:id?')
+  @Get('/:uuid?')
   @UseInterceptors(CategoryInterceptor)
   category(
-    @Param('id') id: string,
+    @Param('uuid') uuid: string,
     @Req() req: CustomRequest,
   ): Promise<Category[]> {
     const user_id = req.user.uuid;
-    return this.categoryService.category(user_id, id);
+    return this.categoryService.category(user_id, uuid);
   }
 
   @Post()

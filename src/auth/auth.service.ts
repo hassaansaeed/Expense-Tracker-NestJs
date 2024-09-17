@@ -9,11 +9,15 @@ import { Model } from 'mongoose';
 import { User } from 'src/user/user.schems';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { AuthCompanySignUpDto } from './dto/auth-company-signup.dto';
+import { Company } from 'src/company/company.schema';
+import { Mode } from 'fs';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
+    @InjectModel(Company.name) private companyModel: Model<Company>,
     private jwtService: JwtService,
   ) {}
 
@@ -21,8 +25,6 @@ export class AuthService {
     authSignUpDto: AuthSignUpDto,
   ): Promise<{ user: User; accessToken: string }> {
     const { firstName, lastName, email, password } = authSignUpDto;
-
-    // console.log('create us')
     const existingUser = await this.userModel.findOne({ email });
     if (existingUser) {
       throw new BadRequestException('Email already exists');
@@ -36,13 +38,47 @@ export class AuthService {
       lastName,
       email,
       password: hashedPasswrd,
-      role: 'admin',
     });
     const savedUser = await newUser.save();
     const payload = { email: savedUser.email, sub: savedUser._id }; // sub is usually the user ID
     const accessToken = this.jwtService.sign(payload);
+    return {
+      user: savedUser,
+      accessToken,
+    };
+  }
 
-    // Return the user and the token
+  async comapnySignUp(
+    authCompanySignUpDto: AuthCompanySignUpDto,
+  ): Promise<{ user: User; accessToken: string }> {
+    const { firstName, lastName, email, password, companyName, address } =
+      authCompanySignUpDto;
+
+    const existingUser = await this.userModel.findOne({ email });
+    if (existingUser) {
+      throw new BadRequestException('Email already exists');
+    }
+
+    const salat = await bcrypt.genSalt();
+    const hashedPasswrd = await bcrypt.hash(password, salat);
+
+    const newUser = new this.userModel({
+      firstName,
+      lastName,
+      email,
+      password: hashedPasswrd,
+      role: 'company',
+    });
+    const savedUser = await newUser.save();
+
+    this.companyModel.create({
+      name: companyName,
+      address: address,
+      user_uuid: savedUser.uuid,
+    });
+
+    const payload = { email: savedUser.email, sub: savedUser._id };
+    const accessToken = this.jwtService.sign(payload);
     return {
       user: savedUser,
       accessToken,
