@@ -50,7 +50,8 @@ export class ExpenseService {
   }
 
   async update(id, createExpenseDto: CreateExpenseDto): Promise<Expense> {
-    const { category_id, budget_id, name, amount, user_id } = createExpenseDto;
+    const { category_id, budget_id, name, amount, user_id, company_uuid } =
+      createExpenseDto;
 
     const [category, expense] = await Promise.all([
       this.categoryModel.findOne({ uuid: category_id }),
@@ -67,6 +68,10 @@ export class ExpenseService {
       throw new ForbiddenException(
         'you do not have permission to edit this expense',
       );
+    }
+
+    if (createExpenseDto.company_uuid) {
+      expense.company_uuid = company_uuid;
     }
 
     expense.name = name;

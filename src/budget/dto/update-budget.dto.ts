@@ -32,5 +32,7 @@ export class UpdateBudgetDto {
 
   user_id?: string;
 
+  company_uuid?: string;
+
   id?: string;
 }

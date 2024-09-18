@@ -29,7 +29,14 @@ export class CompanyService {
   }
 
   async create(createCompanyDto: CreateCompanyDto): Promise<Company> {
-    return this.companyModel.create(createCompanyDto);
+    const { name, address, user_uuid } = createCompanyDto;
+    console.log(user_uuid);
+    // return;
+    return this.companyModel.create({
+      name,
+      address,
+      user_uuid,
+    });
   }
 
   async usersToAdd(user_uuid, company_uuid) {
@@ -37,12 +44,15 @@ export class CompanyService {
       user_uuid: user_uuid,
       uuid: company_uuid,
     });
+
     if (!company) {
       throw new NotFoundException('A company must be selected to get users.');
     }
-
     return await this.userModel
-      .find({ role: 'user', company_uuid: null })
+      .find({
+        role: 'user',
+        $or: [{ company_uuid: null }, { company_uuid: company_uuid }],
+      })
       .exec();
   }
 
@@ -54,20 +64,28 @@ export class CompanyService {
     if (!company) {
       throw new Error('Company not found');
     }
+
     company.name = updateCompanyDto.name;
     company.address = updateCompanyDto.address;
-    await Promise.all(
-      updateCompanyDto.users.map(async (userUuid: string) => {
-        await this.userModel.findOneAndUpdate(
-          { uuid: userUuid },
-          { company_uuid: company.uuid },
-        );
-      }),
+
+    await this.userModel.updateMany(
+      { company_uuid: company.uuid },
+      { company_uuid: null },
     );
+
+    if (updateCompanyDto.users?.length > 0) {
+      await Promise.all(
+        updateCompanyDto.users.map(async (userUuid: string) => {
+          await this.userModel.findOneAndUpdate(
+            { uuid: userUuid },
+            { company_uuid: company.uuid },
+          );
+        }),
+      );
+    }
 
     await company.save();
 
-    // Return the updated company and optionally some status for the updated users
     return {
       message: 'Company and users updated successfully',
       company,

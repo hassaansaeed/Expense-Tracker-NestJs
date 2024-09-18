@@ -26,4 +26,6 @@ export class CreateBudgetDto {
   category_id: string;
 
   user_id?: string;
+
+  company_uuid?: string;
 }

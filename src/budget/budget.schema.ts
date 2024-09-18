@@ -27,6 +27,9 @@ export class Budget extends Document {
 
   @Prop({ type: String, required: true })
   user_id: string;
+
+  @Prop({ type: String })
+  company_uuid: string;
 }
 
 export const BudgetSchema = SchemaFactory.createForClass(Budget);

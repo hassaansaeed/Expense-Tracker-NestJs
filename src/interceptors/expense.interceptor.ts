@@ -22,9 +22,16 @@ export class ExpenseInterceptor implements NestInterceptor {
   }
 
   private transformExpense(expense) {
-    const { uuid, name, amount, createdAt, category_id, budget_id } = expense;
+    const {
+      uuid,
+      name,
+      amount,
+      createdAt,
+      category_id,
+      budget_id,
+      company_uuid,
+    } = expense;
     const categoryName = expense.category_id?.name || null;
-    // console.log(expense);
 
     return {
       uuid,
@@ -35,6 +42,7 @@ export class ExpenseInterceptor implements NestInterceptor {
       category_id: expense.category_id.uuid,
       budget_id: expense.budget_id.uuid,
       budget_name: expense.budget_id.name,
+      company_uuid,
     };
   }
 }

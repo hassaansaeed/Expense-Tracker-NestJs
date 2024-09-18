@@ -23,6 +23,7 @@ export class BudgetService {
         'Category Not Found Please select a category to add budget',
       );
     }
+
     return this.budgetModel.create(createBudgetDto);
   }
 

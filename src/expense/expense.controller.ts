@@ -40,11 +40,14 @@ export class ExpenseController {
   }
 
   @Post()
-  create(
+  async create(
     @Body() createExpenseDto: CreateExpenseDto,
     @Req() req: CustomRequest,
   ): Promise<Expense> {
     createExpenseDto.user_id = req.user.uuid;
+    const userRole = req.user.role;
+    createExpenseDto.userRole = userRole;
+
     return this.expenseService.create(createExpenseDto);
   }
 

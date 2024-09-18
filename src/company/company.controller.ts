@@ -39,6 +39,7 @@ export class CompanyController {
     @Req() req: CustomRequest,
   ): Promise<Company> {
     createCompanyDto.user_uuid = req.user.uuid;
+
     return this.companyService.create(createCompanyDto);
   }
 
