@@ -29,8 +29,8 @@ export class CompanyController {
     @Param('id') id: string,
     @Req() req: CustomRequest,
   ): Promise<Company[]> {
-    const user_uuid = req.user.uuid;
-    return this.companyService.companies(user_uuid, id);
+    const userUuid = req.user.uuid;
+    return this.companyService.companies(userUuid, id);
   }
 
   @Post()
@@ -38,18 +38,18 @@ export class CompanyController {
     @Body() createCompanyDto: CreateCompanyDto,
     @Req() req: CustomRequest,
   ): Promise<Company> {
-    createCompanyDto.user_uuid = req.user.uuid;
+    createCompanyDto.userUuid = req.user.uuid;
 
     return this.companyService.create(createCompanyDto);
   }
 
-  @Get('/add/users/:company_uuid')
+  @Get('/add/users/:companyUuid')
   usersToAdd(
-    @Param('company_uuid') company_uuid: string,
+    @Param('companyUuid') companyUuid: string,
     @Req() req: CustomRequest,
   ) {
-    const user_uuid = req.user.uuid;
-    return this.companyService.usersToAdd(user_uuid, company_uuid);
+    const userUuid = req.user.uuid;
+    return this.companyService.usersToAdd(userUuid, companyUuid);
   }
 
   @Put('/:uuid')
@@ -58,7 +58,7 @@ export class CompanyController {
     @Req() req: CustomRequest,
     @Param('uuid') uuid: string,
   ) {
-    updateCompanyDto.user_uuid = req.user.uuid;
+    updateCompanyDto.userUuid = req.user.uuid;
     updateCompanyDto.uuid = uuid;
     return this.companyService.update(updateCompanyDto);
   }

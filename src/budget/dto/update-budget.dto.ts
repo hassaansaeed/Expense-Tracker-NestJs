@@ -20,19 +20,19 @@ export class UpdateBudgetDto {
   @IsOptional()
   @Type(() => Date)
   @IsDate({ message: 'Start Date must be a valid date in DD-MM-YYYY format' })
-  start_date: Date;
+  startDate: Date;
 
   @IsOptional()
   @Type(() => Date)
   @IsDate({ message: 'End Date must be a valid date in DD-MM-YYYY format' })
-  end_date: Date;
+  endDate: Date;
 
   @IsOptional()
-  category_id: string;
+  categoryUuid: string;
 
-  user_id?: string;
+  userUuid?: string;
 
-  company_uuid?: string;
+  companyUuid?: string;
 
   id?: string;
 }

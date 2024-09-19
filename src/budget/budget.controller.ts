@@ -24,15 +24,15 @@ export class BudgetController {
 
   @Post()
   create(@Body() createBudgetDto: CreateBudgetDto, @Req() req: CustomRequest) {
-    createBudgetDto.user_id = req.user.uuid;
+    createBudgetDto.userUuid = req.user.uuid;
     return this.budgetService.create(createBudgetDto);
   }
 
   @Get('/:id?')
   @UseInterceptors(BudgetInterceptor)
   budgets(@Param('id') id: string, @Req() req: CustomRequest) {
-    const user_id = req.user.uuid;
-    return this.budgetService.budgets(user_id, id);
+    const userUuid = req.user.uuid;
+    return this.budgetService.budgets(userUuid, id);
   }
 
   @Put('/:id')
@@ -42,13 +42,13 @@ export class BudgetController {
     @Req() req: CustomRequest,
   ) {
     updateBudgetDto.id = id;
-    updateBudgetDto.user_id = req.user.uuid;
+    updateBudgetDto.userUuid = req.user.uuid;
     return this.budgetService.update(updateBudgetDto);
   }
 
   @Delete('/:id')
   delete(@Param('id') id: string, @Req() req: CustomRequest) {
-    const user_id = req.user.uuid;
-    return this.budgetService.delete(user_id, id);
+    const userUuid = req.user.uuid;
+    return this.budgetService.delete(userUuid, id);
   }
 }

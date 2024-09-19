@@ -20,17 +20,17 @@ export class ExpenseService {
     @InjectModel(Budget.name) private budgetModel: Model<Budget>,
   ) {}
 
-  async expenses(user_id): Promise<Expense[]> {
+  async expenses(userUuid): Promise<Expense[]> {
     return this.expenseModel
-      .find({ user_id: user_id })
+      .find({ userUuid: userUuid })
       .populate(PopulateUtils.populateCategory())
       .populate(PopulateUtils.populateBudget())
       .exec();
   }
 
-  async expense(id, user_id): Promise<Expense> {
+  async expense(id, userUuid): Promise<Expense> {
     return this.expenseModel
-      .findOne({ uuid: id, user_id: user_id })
+      .findOne({ uuid: id, userUuid: userUuid })
       .populate(PopulateUtils.populateCategory())
       .populate(PopulateUtils.populateBudget())
       .exec();
@@ -38,8 +38,8 @@ export class ExpenseService {
 
   async create(createExpenseDto: CreateExpenseDto) {
     const [category, budget] = await Promise.all([
-      this.categoryModel.findOne({ uuid: createExpenseDto.category_id }),
-      this.budgetModel.findOne({ uuid: createExpenseDto.budget_id }),
+      this.categoryModel.findOne({ uuid: createExpenseDto.categoryUuid }),
+      this.budgetModel.findOne({ uuid: createExpenseDto.budgetUuid }),
     ]);
 
     if (!category || !budget) {
@@ -50,11 +50,11 @@ export class ExpenseService {
   }
 
   async update(id, createExpenseDto: CreateExpenseDto): Promise<Expense> {
-    const { category_id, budget_id, name, amount, user_id, company_uuid } =
+    const { categoryUuid, budgetUuid, name, amount, userUuid, companyUuid } =
       createExpenseDto;
 
     const [category, expense] = await Promise.all([
-      this.categoryModel.findOne({ uuid: category_id }),
+      this.categoryModel.findOne({ uuid: categoryUuid }),
       this.expenseModel.findOne({ uuid: id }),
     ]);
 
@@ -64,29 +64,29 @@ export class ExpenseService {
     if (!category) {
       throw new NotFoundException('category not found');
     }
-    if (expense.user_id != user_id) {
+    if (expense.userUuid != userUuid) {
       throw new ForbiddenException(
         'you do not have permission to edit this expense',
       );
     }
 
-    if (createExpenseDto.company_uuid) {
-      expense.company_uuid = company_uuid;
+    if (createExpenseDto.companyUuid) {
+      expense.companyUuid = companyUuid;
     }
 
     expense.name = name;
     expense.amount = amount;
-    expense.category_id = category_id;
-    expense.budget_id = budget_id;
+    expense.categoryUuid = categoryUuid;
+    expense.budgetUuid = budgetUuid;
     return expense.save();
   }
 
-  async delete(id, user_id) {
+  async delete(id, userUuid) {
     const expense = await this.expenseModel.findOne({ uuid: id });
     if (!expense) {
       throw new NotFoundException('expense not found');
     }
-    if (expense.user_id != user_id) {
+    if (expense.userUuid != userUuid) {
       throw new ForbiddenException(
         'You do not have permission to delete this expense',
       );

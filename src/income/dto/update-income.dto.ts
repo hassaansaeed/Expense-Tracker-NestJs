@@ -36,5 +36,5 @@ export class UpdateIncomeDto {
   @IsDate({ message: 'Date must be a valid date in DD-MM-YYYY format' })
   date?: Date;
 
-  user_id?: string;
+  userUuid?: string;
 }

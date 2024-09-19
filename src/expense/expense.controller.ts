@@ -25,8 +25,8 @@ export class ExpenseController {
   @Get()
   @UseInterceptors(ExpenseInterceptor)
   expenses(@Req() req: CustomRequest): Promise<Expense[]> {
-    const user_id = req.user.uuid;
-    return this.expenseService.expenses(user_id);
+    const userUuid = req.user.uuid;
+    return this.expenseService.expenses(userUuid);
   }
 
   @Get('/:id')
@@ -35,8 +35,8 @@ export class ExpenseController {
     @Param('id') id: string,
     @Req() req: CustomRequest,
   ): Promise<Expense> {
-    const user_id = req.user.uuid;
-    return this.expenseService.expense(id, user_id);
+    const userUuid = req.user.uuid;
+    return this.expenseService.expense(id, userUuid);
   }
 
   @Post()
@@ -44,7 +44,7 @@ export class ExpenseController {
     @Body() createExpenseDto: CreateExpenseDto,
     @Req() req: CustomRequest,
   ): Promise<Expense> {
-    createExpenseDto.user_id = req.user.uuid;
+    createExpenseDto.userUuid = req.user.uuid;
     const userRole = req.user.role;
     createExpenseDto.userRole = userRole;
 
@@ -57,13 +57,13 @@ export class ExpenseController {
     @Req() req: CustomRequest,
     @Param('id') id: string,
   ) {
-    CreateExpenseDto.user_id = req.user.uuid;
+    CreateExpenseDto.userUuid = req.user.uuid;
     return this.expenseService.update(id, CreateExpenseDto);
   }
 
   @Delete('/:id')
   delete(@Param('id') id: string, @Req() req: CustomRequest) {
-    const user_id = req.user.uuid;
-    return this.expenseService.delete(id, user_id);
+    const userUuid = req.user.uuid;
+    return this.expenseService.delete(id, userUuid);
   }
 }

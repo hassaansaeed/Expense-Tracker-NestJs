@@ -16,7 +16,7 @@ export class BudgetService {
 
   async create(createBudgetDto: CreateBudgetDto): Promise<Budget> {
     const category = await this.categoryModel.findOne({
-      uuid: createBudgetDto.category_id,
+      uuid: createBudgetDto.categoryUuid,
     });
     if (!category) {
       throw new NotFoundException(
@@ -27,19 +27,19 @@ export class BudgetService {
     return this.budgetModel.create(createBudgetDto);
   }
 
-  async budgets(user_id, id?: string): Promise<Budget | Budget[]> {
+  async budgets(userUuid, id?: string): Promise<Budget | Budget[]> {
     if (id) {
       return this.budgetModel
         .findOne({
           uuid: id,
-          user_id: user_id,
+          userUuid: userUuid,
         })
         .populate(PopulateUtils.populateCategory())
         .exec();
     } else {
       return this.budgetModel
         .find({
-          user_id: user_id,
+          userUuid: userUuid,
         })
         .populate(PopulateUtils.populateCategory())
         .exec();
@@ -51,7 +51,7 @@ export class BudgetService {
       .findOneAndUpdate(
         {
           uuid: updateBudgetDto.id,
-          user_id: updateBudgetDto.user_id,
+          userUuid: updateBudgetDto.userUuid,
         },
         updateBudgetDto,
 
@@ -70,10 +70,10 @@ export class BudgetService {
     return budget;
   }
 
-  async delete(user_id, id: string) {
+  async delete(userUuid, id: string) {
     const budget = await this.budgetModel.findOne({
       uuid: id,
-      user_id: user_id,
+      userUuid: userUuid,
     });
 
     if (!budget) {

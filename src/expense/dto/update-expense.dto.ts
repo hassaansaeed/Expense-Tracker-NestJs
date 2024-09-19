@@ -11,12 +11,12 @@ export class CreateExpenseDto {
 
   @IsOptional()
   @IsNotEmpty()
-  category_id: string;
+  categoryUuid: string;
 
   @IsOptional()
-  budget_id: string;
+  budgetUuid: string;
 
-  user_id?: string;
+  userUuid?: string;
 
-  company_uuid?: string;
+  companyUuid?: string;
 }

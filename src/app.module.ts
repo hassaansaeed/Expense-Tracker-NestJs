@@ -13,7 +13,8 @@ import { CompanyModule } from './company/company.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/expense-tracker'),
+    // MongooseModule.forRoot('mongodb://localhost/expense-tracker'), // Orignal Database
+    MongooseModule.forRoot('mongodb://localhost/expense-tracker-update'),
 
     // Atlas Database
     // MongooseModule.forRoot(

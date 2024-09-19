@@ -17,19 +17,19 @@ export class Budget extends Document {
   amount: string;
 
   @Prop({ required: true })
-  start_date: Date;
+  startDate: Date;
 
   @Prop({ required: true })
-  end_date: Date;
+  endDate: Date;
 
   @Prop({ type: String, ref: 'Category' })
-  category_id: string;
+  categoryUuid: string;
 
   @Prop({ type: String, required: true })
-  user_id: string;
+  userUuid: string;
 
   @Prop({ type: String })
-  company_uuid: string;
+  companyUuid: string;
 }
 
 export const BudgetSchema = SchemaFactory.createForClass(Budget);

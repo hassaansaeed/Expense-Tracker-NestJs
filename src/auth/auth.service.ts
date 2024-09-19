@@ -74,7 +74,7 @@ export class AuthService {
     this.companyModel.create({
       name: companyName,
       address: address,
-      user_uuid: savedUser.uuid,
+      userUuid: savedUser.uuid,
     });
 
     const payload = { email: savedUser.email, sub: savedUser._id };

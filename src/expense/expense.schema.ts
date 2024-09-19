@@ -15,16 +15,16 @@ export class Expense extends Document {
   amount: string;
 
   @Prop({ type: String, ref: 'Category' })
-  category_id: string;
+  categoryUuid: string;
 
   @Prop({ type: String })
-  budget_id: string;
+  budgetUuid: string;
 
   @Prop({ type: String, required: true })
-  user_id: string;
+  userUuid: string;
 
   @Prop()
-  company_uuid: string;
+  companyUuid: string;
 
   // @Prop({ type: CategorySchema })
   // category: Category;

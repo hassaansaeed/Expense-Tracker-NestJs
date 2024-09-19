@@ -23,7 +23,7 @@ export class User extends Document {
   role: string;
 
   @Prop({ default: null })
-  company_uuid: string;
+  companyUuid: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

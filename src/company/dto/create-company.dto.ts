@@ -7,5 +7,5 @@ export class CreateCompanyDto {
   @IsNotEmpty()
   address: string;
 
-  user_uuid?: string;
+  userUuid?: string;
 }

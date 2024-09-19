@@ -13,36 +13,36 @@ export class CompanyService {
     @InjectModel(User.name) private userModel: Model<User>,
   ) {}
 
-  async companies(user_uuid, uuid): Promise<Company[]> {
+  async companies(userUuid, uuid): Promise<Company[]> {
     if (uuid) {
       return this.companyModel.findOne({
-        user_uuid: user_uuid,
+        userUuid: userUuid,
         uuid: uuid,
       });
     } else {
       return this.companyModel
         .find({
-          user_uuid: user_uuid,
+          userUuid: userUuid,
         })
         .exec();
     }
   }
 
   async create(createCompanyDto: CreateCompanyDto): Promise<Company> {
-    const { name, address, user_uuid } = createCompanyDto;
-    console.log(user_uuid);
+    const { name, address, userUuid } = createCompanyDto;
+    console.log(userUuid);
     // return;
     return this.companyModel.create({
       name,
       address,
-      user_uuid,
+      userUuid,
     });
   }
 
-  async usersToAdd(user_uuid, company_uuid) {
+  async usersToAdd(userUuid, companyUuid) {
     const company = await this.companyModel.findOne({
-      user_uuid: user_uuid,
-      uuid: company_uuid,
+      userUuid: userUuid,
+      uuid: companyUuid,
     });
 
     if (!company) {
@@ -51,7 +51,7 @@ export class CompanyService {
     return await this.userModel
       .find({
         role: 'user',
-        $or: [{ company_uuid: null }, { company_uuid: company_uuid }],
+        $or: [{ companyUuid: null }, { companyUuid: companyUuid }],
       })
       .exec();
   }
@@ -69,8 +69,8 @@ export class CompanyService {
     company.address = updateCompanyDto.address;
 
     await this.userModel.updateMany(
-      { company_uuid: company.uuid },
-      { company_uuid: null },
+      { companyUuid: company.uuid },
+      { companyUuid: null },
     );
 
     if (updateCompanyDto.users?.length > 0) {
@@ -78,7 +78,7 @@ export class CompanyService {
         updateCompanyDto.users.map(async (userUuid: string) => {
           await this.userModel.findOneAndUpdate(
             { uuid: userUuid },
-            { company_uuid: company.uuid },
+            { companyUuid: company.uuid },
           );
         }),
       );

@@ -27,7 +27,7 @@ export class Income extends Document {
   date: Date;
 
   @Prop({ type: String, required: true })
-  user_id: string;
+  userUuid: string;
 }
 
 export const IncomeSchema = SchemaFactory.createForClass(Income);

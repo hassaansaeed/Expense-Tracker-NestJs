@@ -22,7 +22,7 @@ export class ReportingService {
   }
 
   async getExpensesDetail(
-    user_id: string,
+    userUuid: string,
     startDate?: Date,
     endDate?: Date,
   ): Promise<Expense[]> {
@@ -33,7 +33,7 @@ export class ReportingService {
 
     return this.expenseModel
       .find({
-        user_id: user_id,
+        userUuid: userUuid,
         createdAt: { $gte: start, $lte: end },
       })
       .populate(PopulateUtils.populateCategory())
@@ -43,7 +43,7 @@ export class ReportingService {
 
   // Get total income for a given period
   async getTotalIncome(
-    user_id: string,
+    userUuid: string,
     startDate?: Date,
     endDate?: Date,
   ): Promise<Array<{ uuid: string; name: string; amount: number }>> {
@@ -55,7 +55,7 @@ export class ReportingService {
     const result = await this.incomeModel.aggregate([
       {
         $match: {
-          user_id: user_id,
+          userUuid: userUuid,
           createdAt: { $gte: start, $lte: end },
         },
       },
@@ -83,7 +83,7 @@ export class ReportingService {
 
   // Get category-wise breakdown of expenses
   async getCategoryWiseExpenses(
-    user_id: string,
+    userUuid: string,
     startDate?: Date,
     endDate?: Date,
   ): Promise<any[]> {
@@ -95,7 +95,7 @@ export class ReportingService {
     return this.expenseModel.aggregate([
       {
         $match: {
-          user_id: user_id,
+          userUuid: userUuid,
           createdAt: { $gte: start, $lte: end },
         },
       },
@@ -124,7 +124,7 @@ export class ReportingService {
   }
 
   async getBudgetExpenseWise(
-    user_id: string,
+    userUuid: string,
     startDate?: Date,
     endDate?: Date,
   ) {
@@ -136,15 +136,15 @@ export class ReportingService {
 
     const budgets = await this.budgetModel
       .find({
-        user_id: user_id,
-        start_date: { $lte: end },
-        end_date: { $gte: start },
+        userUuid: userUuid,
+        startDate: { $lte: end },
+        endDate: { $gte: start },
       })
       .lean();
 
     const expenses = await this.expenseModel
       .find({
-        user_id: user_id,
+        userUuid: userUuid,
 
         createdAt: { $gte: start, $lte: end },
       })
@@ -152,7 +152,7 @@ export class ReportingService {
 
     return budgets.map((budget) => {
       const spentAmount = expenses
-        .filter((expense) => expense.budget_id === budget.uuid)
+        .filter((expense) => expense.budgetUuid === budget.uuid)
         .reduce((total, expense) => total + parseFloat(expense.amount), 0);
 
       return {

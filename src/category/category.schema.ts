@@ -8,7 +8,7 @@ export class Category extends Document {
   uuid: string;
 
   @Prop({ type: String, required: true })
-  user_id: string;
+  userUuid: string;
 
   @Prop({ required: true })
   name: string;

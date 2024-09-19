@@ -34,8 +34,8 @@ export class CategoryController {
     @Param('uuid') uuid: string,
     @Req() req: CustomRequest,
   ): Promise<Category[]> {
-    const user_id = req.user.uuid;
-    return this.categoryService.category(user_id, uuid);
+    const userUuid = req.user.uuid;
+    return this.categoryService.category(userUuid, uuid);
   }
 
   @Post()
@@ -43,7 +43,7 @@ export class CategoryController {
     @Body() createCategoryDto: CreateCategoryDto,
     @Req() req: CustomRequest,
   ) {
-    createCategoryDto.user_id = req.user.uuid;
+    createCategoryDto.userUuid = req.user.uuid;
     return this.categoryService.create(createCategoryDto);
   }
 
@@ -53,13 +53,13 @@ export class CategoryController {
     @Body() updateCategoryDto: UpdateCategoryDto,
     @Req() req: CustomRequest,
   ) {
-    updateCategoryDto.user_id = req.user.uuid;
+    updateCategoryDto.userUuid = req.user.uuid;
     return this.categoryService.update(id, updateCategoryDto);
   }
 
   @Delete('/:id')
   delete(@Param('id') id: string, @Req() req: CustomRequest) {
-    const user_id = req.user.uuid;
-    return this.categoryService.delete(id, user_id);
+    const userUuid = req.user.uuid;
+    return this.categoryService.delete(id, userUuid);
   }
 }

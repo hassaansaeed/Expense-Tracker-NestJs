@@ -10,11 +10,11 @@ import { PopulateUtils } from 'src/utils/populate.utils';
 export class IncomeService {
   constructor(@InjectModel(Income.name) private incomeModel: Model<Income>) {}
 
-  async incomes(user_id: string, id?): Promise<Income | Income[]> {
+  async incomes(userUuid: string, id?): Promise<Income | Income[]> {
     if (id) {
       return this.incomeModel.findOne({ uuid: id });
     } else {
-      return this.incomeModel.find({ user_id: user_id });
+      return this.incomeModel.find({ userUuid: userUuid });
     }
   }
 
@@ -25,7 +25,7 @@ export class IncomeService {
   async update(updateIncomeDto: UpdateIncomeDto, id: string): Promise<Income> {
     const updatedIncome = await this.incomeModel
       .findOneAndUpdate(
-        { uuid: id, user_id: updateIncomeDto.user_id },
+        { uuid: id, userUuid: updateIncomeDto.userUuid },
         updateIncomeDto,
         {
           new: true,
@@ -43,10 +43,10 @@ export class IncomeService {
     return updatedIncome;
   }
 
-  async delete(user_id, id: string) {
+  async delete(userUuid, id: string) {
     const income = await this.incomeModel.findOne({
       uuid: id,
-      user_id: user_id,
+      userUuid: userUuid,
     });
     if (!income) {
       throw new NotFoundException(

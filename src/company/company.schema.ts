@@ -14,7 +14,7 @@ export class Company extends Document {
   uuid: string;
 
   @Prop()
-  user_uuid: string;
+  userUuid: string;
 }
 
 export const CompanySchema = SchemaFactory.createForClass(Company);

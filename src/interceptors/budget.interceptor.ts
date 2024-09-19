@@ -27,23 +27,23 @@ export class BudgetInterceptor implements NestInterceptor {
       name,
       description,
       amount,
-      start_date,
-      end_date,
+      startDate,
+      endDate,
       createdAt,
-      category_id,
+      categoryUuid,
     } = budget;
-    const categoryName = budget.category_id?.name || null;
-    const categoryId = budget.category_id?.uuid || null;
+    const categoryName = budget.categoryUuid?.name || null;
+    const categoryId = budget.categoryUuid?.uuid || null;
 
     return {
       uuid,
       name,
       description,
       amount,
-      start_date,
-      end_date,
+      startDate,
+      endDate,
       createdAt,
-      category_id: categoryId,
+      categoryUuid: categoryId,
 
       category: categoryName,
     };

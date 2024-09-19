@@ -8,16 +8,16 @@ export class CreateExpenseDto {
   amount: string;
 
   @IsNotEmpty()
-  category_id: string;
+  categoryUuid: string;
 
   @IsNotEmpty()
-  budget_id: string;
+  budgetUuid: string;
 
-  user_id?: string;
+  userUuid?: string;
 
   @ValidateIf((o) => o.userRole === 'company')
   @IsNotEmpty({ message: 'Company UUID is required for company role' })
-  company_uuid: string;
+  companyUuid: string;
 
   userRole: string; // New field for user role
 }

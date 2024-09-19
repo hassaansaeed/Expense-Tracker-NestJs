@@ -25,27 +25,27 @@ export class CategoryService {
     }
   }
 
-  async category(user_id, id): Promise<Category[]> {
+  async category(userUuid, id): Promise<Category[]> {
     if (id) {
       return this.categoryModel.findOne({
         uuid: id,
-        user_id: user_id,
+        userUuid: userUuid,
       });
     } else {
       return await this.categoryModel.find({
-        user_id,
+        userUuid,
       });
     }
   }
   async create(createCategoryDto: CreateCategoryDto): Promise<Category> {
-    const { name, user_id } = createCategoryDto;
+    const { name, userUuid } = createCategoryDto;
     const find = await this.categoryModel.findOne({
       name: { $regex: new RegExp(`^${name}$`, 'i') },
     });
     if (find) {
       throw new BadRequestException('Name already exists');
     }
-    return this.categoryModel.create({ name: name, user_id: user_id });
+    return this.categoryModel.create({ name: name, userUuid: userUuid });
   }
 
   async update(id: string, updateCategoryDto: any): Promise<Category> {
@@ -53,7 +53,7 @@ export class CategoryService {
     if (!category) {
       throw new NotFoundException('Category Not Found');
     }
-    const { name, user_id } = updateCategoryDto;
+    const { name, userUuid } = updateCategoryDto;
 
     const existingCategory = await this.categoryModel.findOne({
       name,
@@ -61,7 +61,7 @@ export class CategoryService {
     });
 
     if (existingCategory) {
-      if (existingCategory.user_id != user_id) {
+      if (existingCategory.userUuid != userUuid) {
         throw new ForbiddenException(
           'You do not have permission to update this category',
         );
@@ -73,12 +73,12 @@ export class CategoryService {
     return category.save();
   }
 
-  async delete(id, user_id) {
+  async delete(id, userUuid) {
     const category = await this.categoryModel.findOne({ uuid: id });
     if (!category) {
       throw new BadRequestException('Category Not Found');
     }
-    if (category.user_id !== user_id) {
+    if (category.userUuid !== userUuid) {
       throw new ForbiddenException(
         'You do not have permission to delete this category',
       );

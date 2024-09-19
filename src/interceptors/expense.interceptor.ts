@@ -27,11 +27,11 @@ export class ExpenseInterceptor implements NestInterceptor {
       name,
       amount,
       createdAt,
-      category_id,
-      budget_id,
-      company_uuid,
+      categoryUuid,
+      budgetUuid,
+      companyUuid,
     } = expense;
-    const categoryName = expense.category_id?.name || null;
+    const categoryName = expense.categoryUuid?.name || null;
 
     return {
       uuid,
@@ -39,10 +39,10 @@ export class ExpenseInterceptor implements NestInterceptor {
       amount,
       createdAt,
       category: categoryName,
-      category_id: expense.category_id.uuid,
-      budget_id: expense.budget_id.uuid,
-      budget_name: expense.budget_id.name,
-      company_uuid,
+      categoryUuid: expense.categoryUuid.uuid,
+      budgetUuid: expense.budgetUuid.uuid,
+      budget_name: expense.budgetUuid.name,
+      companyUuid,
     };
   }
 }

@@ -25,10 +25,10 @@ export class ReportingController {
     @Query('startDate') startDate?: string,
     @Query('endDate') endDate?: string,
   ): Promise<Expense[]> {
-    const user_id = req.user.uuid;
+    const userUuid = req.user.uuid;
     const start = startDate ? new Date(startDate) : undefined;
     const end = endDate ? new Date(endDate) : undefined;
-    return this.reportingService.getExpensesDetail(user_id, start, end);
+    return this.reportingService.getExpensesDetail(userUuid, start, end);
   }
 
   @Get('income/source-wise')
@@ -39,9 +39,9 @@ export class ReportingController {
   ): Promise<Array<{ uuid: string; name: string; amount: number }>> {
     const start = startDate ? new Date(startDate) : undefined;
     const end = endDate ? new Date(endDate) : undefined;
-    const user_id = req.user.uuid;
+    const userUuid = req.user.uuid;
 
-    return this.reportingService.getTotalIncome(user_id, start, end);
+    return this.reportingService.getTotalIncome(userUuid, start, end);
   }
 
   @Get('expenses/category-wise')
@@ -52,8 +52,8 @@ export class ReportingController {
   ): Promise<any[]> {
     const start = startDate ? new Date(startDate) : undefined;
     const end = endDate ? new Date(endDate) : undefined;
-    const user_id = req.user.uuid;
-    return this.reportingService.getCategoryWiseExpenses(user_id, start, end);
+    const userUuid = req.user.uuid;
+    return this.reportingService.getCategoryWiseExpenses(userUuid, start, end);
   }
 
   @Get('budget/expense-wise')
@@ -64,8 +64,8 @@ export class ReportingController {
   ) {
     const start = startDate ? new Date(startDate) : undefined;
     const end = endDate ? new Date(endDate) : undefined;
-    const user_id = req.user.uuid;
-    return this.reportingService.getBudgetExpenseWise(user_id, start, end);
+    const userUuid = req.user.uuid;
+    return this.reportingService.getBudgetExpenseWise(userUuid, start, end);
   }
 
   @Get('income/category-wise')

@@ -7,7 +7,7 @@ export class UpdateCompanyDto {
   @IsNotEmpty()
   address: string;
 
-  user_uuid?: string;
+  userUuid?: string;
   users: [];
   uuid?: string;
 }

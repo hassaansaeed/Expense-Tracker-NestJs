@@ -30,13 +30,13 @@ export class IncomeController {
     @Req() req: CustomRequest,
     @Param('id') id?: string,
   ): Promise<Income | Income[]> {
-    const user_id = req.user.uuid;
-    return this.incomeService.incomes(user_id, id);
+    const userUuid = req.user.uuid;
+    return this.incomeService.incomes(userUuid, id);
   }
 
   @Post()
   create(@Body() createIncomeDto: CreateIncomeDto, @Req() req: CustomRequest) {
-    createIncomeDto.user_id = req.user.uuid;
+    createIncomeDto.userUuid = req.user.uuid;
     return this.incomeService.create(createIncomeDto);
   }
 
@@ -46,14 +46,14 @@ export class IncomeController {
     @Param('id') id: string,
     @Req() req: CustomRequest,
   ) {
-    updateIncomeDto.user_id = req.user.uuid;
+    updateIncomeDto.userUuid = req.user.uuid;
     return this.incomeService.update(updateIncomeDto, id);
   }
 
   @Delete('/:id')
   delete(@Param('id') id: string, @Req() req: CustomRequest) {
-    const user_id = req.user.uuid;
-    return this.incomeService.delete(user_id, id);
+    const userUuid = req.user.uuid;
+    return this.incomeService.delete(userUuid, id);
   }
 
   @Get('/currencies')
