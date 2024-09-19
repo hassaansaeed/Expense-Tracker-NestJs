@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { AuthSignInDto } from './dto/auth-signin.dto';
 import { User } from 'src/user/user.schems';
 import { AuthGuard } from '@nestjs/passport';
+import { AuthCompanySignUpDto } from './dto/auth-company-signup.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -20,6 +21,13 @@ export class AuthController {
     @Body() authSignUpDto: AuthSignUpDto,
   ): Promise<{ user: User; accessToken: string }> {
     return this.authService.signUp(authSignUpDto);
+  }
+
+  @Post('/company-signup')
+  companySignUp(
+    @Body() authCompanySignUpDto: AuthCompanySignUpDto,
+  ): Promise<{ user: User; accessToken: string }> {
+    return this.authService.comapnySignUp(authCompanySignUpDto);
   }
 
   @Post('login')

@@ -19,16 +19,8 @@ export class User extends Document {
   @Prop({ default: uuid, unique: true })
   uuid: string;
 
-  @Prop({ type: String, enum: ['admin', 'user', 'company'], default: 'user' })
+  @Prop({ type: String, enum: ['user', 'admin', 'company'], default: 'user' })
   role: string;
-
-  @Prop({ default: null })
-  company_uuid: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
-export interface User extends Document {
-  email: string;
-  password: string;
-  role: string; // User has an array of roles
-}

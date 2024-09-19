@@ -6,6 +6,7 @@ import { User, UserSchema } from 'src/user/user.schems';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
+import { Company, CompanySchema } from 'src/company/company.schema';
 
 @Module({
   imports: [
@@ -20,6 +21,13 @@ import { JwtStrategy } from './jwt.strategy';
       {
         name: User.name,
         schema: UserSchema,
+      },
+    ]),
+
+    MongooseModule.forFeature([
+      {
+        name: Company.name,
+        schema: CompanySchema,
       },
     ]),
   ],

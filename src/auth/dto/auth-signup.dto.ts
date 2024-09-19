@@ -12,6 +12,8 @@ export class AuthSignUpDto {
 
   @IsNotEmpty()
   password: string;
+
+  role?: string;
 }
 
 // import { IsString, Matches, MaxLength, MinLength } from 'class-validator';

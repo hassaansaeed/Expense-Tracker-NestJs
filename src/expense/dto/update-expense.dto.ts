@@ -17,4 +17,6 @@ export class CreateExpenseDto {
   budget_id: string;
 
   user_id?: string;
+
+  company_uuid?: string;
 }

@@ -23,6 +23,9 @@ export class Expense extends Document {
   @Prop({ type: String, required: true })
   user_id: string;
 
+  @Prop()
+  company_uuid: string;
+
   // @Prop({ type: CategorySchema })
   // category: Category;
 }

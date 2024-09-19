@@ -21,10 +21,8 @@ export class UserService {
     if (existingUser) {
       throw new BadRequestException('Email already exists');
     }
-
     const salat = await bcrypt.genSalt();
     const hashedPasswrd = await bcrypt.hash(password, salat);
-
     const newUser = new this.userModel({
       firstName,
       lastName,
