@@ -4,6 +4,7 @@ import { BudgetService } from './budget.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Budget, BudgetSchema } from './budget.schema';
 import { Category, CategorySchema } from 'src/category/category.schema';
+import { Income, IncomeSchema } from 'src/income/income.schema';
 
 @Module({
   imports: [
@@ -18,6 +19,13 @@ import { Category, CategorySchema } from 'src/category/category.schema';
       {
         name: Category.name,
         schema: CategorySchema,
+      },
+    ]),
+
+    MongooseModule.forFeature([
+      {
+        name: Income.name,
+        schema: IncomeSchema,
       },
     ]),
   ],
